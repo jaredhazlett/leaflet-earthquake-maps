@@ -60,12 +60,9 @@ function createMap(earthquakes) {
 };
 
 function markerSize(magnitude) {
-  return magnitude * 20000;
+  return magnitude * 25000;
 }
 
-function markerColor(magnitude) {
-
-}
 
 function createMarkers(response) {
 
@@ -78,11 +75,30 @@ function createMarkers(response) {
   for (var i = 0; i < response.features.length; i++) {
     var quakelat = response.features[i].geometry.coordinates[1];
     var quakelon = response.features[i].geometry.coordinates[0];
+    var color = "";
+    if (response.features[i].properties.mag < 1) {
+      color = "blue";
+    }
+    else if (response.features[i].properties.mag < 2) {
+      color = "green";
+    }
+    else if (response.features[i].properties.mag < 3) {
+      color = "yellow";
+    }
+
+    else if (response.features[i].properties.mag < 5) {
+      color = "orange";
+    }
+    else if (response.features[i].properties.mag < 7) {
+      color = "red";
+    }
+    else 
+      color = "black";
     // For each station, create a marker and bind a popup with the station's name
     var earthquakeMarker = L.circle([quakelat, quakelon], {
       fillOpacity: 0.75,
-      color: "yellow",
-      fillColor: "orange",
+      color: color,
+      fillColor: color,
       radius: markerSize(response.features[i].properties.mag)
     }).bindPopup("<h3>Time: " + response.features[i].properties.time + "</h3><h3>Magnitude: " + response.features[i].properties.mag + "</h3>");
     // Add the marker to the bikeMarkers array
