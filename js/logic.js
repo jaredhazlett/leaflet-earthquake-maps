@@ -60,17 +60,18 @@ function createMap(earthquakes) {
 };
 
 function markerSize(magnitude) {
-
+  return magnitude * 20000;
 }
 
 function markerColor(magnitude) {
-  
+
 }
 
 function createMarkers(response) {
 
   // Pull the "stations" property off of response.data
   console.log(response.features[0].geometry.coordinates[0]);
+  console.log(response.features[0].properties.mag);
   // Initialize an array to hold bike markers
   var earthquakeMarkers = [];
   // Loop through the stations array
@@ -82,8 +83,8 @@ function createMarkers(response) {
       fillOpacity: 0.75,
       color: "yellow",
       fillColor: "orange",
-      radius: 30000})
-      .bindPopup("<h3>Time: " + response.features[i].properties.time + "</h3><h3>Magnitude: " + response.features[i].properties.mag + "</h3>");
+      radius: markerSize(response.features[i].properties.mag)
+    }).bindPopup("<h3>Time: " + response.features[i].properties.time + "</h3><h3>Magnitude: " + response.features[i].properties.mag + "</h3>");
     // Add the marker to the bikeMarkers array
     earthquakeMarkers.push(earthquakeMarker);
   // Create a layer group made from the bike markers array, pass it into the createMap function
