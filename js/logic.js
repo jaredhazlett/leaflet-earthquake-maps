@@ -1,6 +1,6 @@
 //SameSite Cookies
 // Store our API endpoint as 
-document.cookie = 'cookie2=.mapbox.com/; SameSite=None; Secure';
+
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
 // Perform a GET request to the query URL
@@ -11,6 +11,16 @@ d3.json(queryUrl, function(data) {
 
 function createMap(earthquakes) {
   //create the tile layer that will be the background of our map
+  var graymap = L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+      attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+      tileSize: 512,
+      maxZoom: 18,
+      zoomOffset: -1,
+      id: "mapbox/light-v10",
+      accessToken: API_KEY
+  });
+
   var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
@@ -38,7 +48,8 @@ function createMap(earthquakes) {
   var baseMaps = {
     "Street Map": streetmap,
     "Dark Map": darkmap,
-    "Light Map": lightmap
+    "Light Map": lightmap,
+    "Gray Map": graymap
   };
 
   // Create an overlayMaps object to hold the bikeStations layer
@@ -50,13 +61,28 @@ function createMap(earthquakes) {
   var myMap = L.map("map", {
     center: [37.8719, -122.2585],
     zoom: 5,
-    layers: [streetmap, darkmap, lightmap, earthquakes]
+    layers: [streetmap, darkmap, lightmap, graymap, earthquakes]
   });
 
   // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "info legend");
+    var grades = [0, 10, 20, 30, 50, 70];
+    var colors = [
+    "blue", "green", "yellow", "orange", "red", "black"
+    ];
+
+    for (var i = 0; i < grades.length; i++) {
+      div.innerHTML += "<i style='background: " + colors[i] + "'></i> " +
+      grades[i] + (grades[i + 1] ? "&ndash;" + grades [i + 1] + "<br>" : "+");
+    }
+    return div;
+  };
+  legend.addTo(myMap);
 };
 
 function markerSize(magnitude) {
@@ -106,6 +132,16 @@ function createMarkers(response) {
   // Create a layer group made from the bike markers array, pass it into the createMap function
   }
   createMap(L.layerGroup(earthquakeMarkers));
-}
+};
+
+  var legend = L.control({
+  position: "bottomright"
+  });
+
+
 // Perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson", createMarkers);
+document.cookie = 'cookie2=.mapbox.com/; SameSite=None; Secure';
+
+
+
