@@ -1,7 +1,7 @@
 //SameSite Cookies
 // Store our API endpoint as 
 document.cookie = 'cookie2=.mapbox.com/; SameSite=None; Secure';
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
@@ -76,20 +76,20 @@ function createMarkers(response) {
     var quakelat = response.features[i].geometry.coordinates[1];
     var quakelon = response.features[i].geometry.coordinates[0];
     var color = "";
-    if (response.features[i].properties.mag < 1) {
+    if (response.features[i].geometry.coordinates[2] < 10) {
       color = "blue";
     }
-    else if (response.features[i].properties.mag < 2) {
+    else if (response.features[i].geometry.coordinates[2] < 20) {
       color = "green";
     }
-    else if (response.features[i].properties.mag < 3) {
+    else if (response.features[i].geometry.coordinates[2] < 30) {
       color = "yellow";
     }
 
-    else if (response.features[i].properties.mag < 5) {
+    else if (response.features[i].geometry.coordinates[2] < 50) {
       color = "orange";
     }
-    else if (response.features[i].properties.mag < 7) {
+    else if (response.features[i].geometry.coordinates[2] < 70) {
       color = "red";
     }
     else 
@@ -100,7 +100,7 @@ function createMarkers(response) {
       color: color,
       fillColor: color,
       radius: markerSize(response.features[i].properties.mag)
-    }).bindPopup("<h3>Time: " + response.features[i].properties.time + "</h3><h3>Magnitude: " + response.features[i].properties.mag + "</h3>");
+    }).bindPopup("<h3>Depth: " + response.features[i].geometry.coordinates[2] + "</h3><h3>Magnitude: " + response.features[i].properties.mag + "</h3>");
     // Add the marker to the bikeMarkers array
     earthquakeMarkers.push(earthquakeMarker);
   // Create a layer group made from the bike markers array, pass it into the createMap function
