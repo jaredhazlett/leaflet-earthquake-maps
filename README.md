@@ -5,4 +5,3 @@ You can choose different modes on which to view the hourly quake markers - Stree
 You can also toggle the earthquake markers on/off.
 
 ![Screen Shot 2021-03-22 at 9 56 35 PM](https://user-images.githubusercontent.com/69011929/112095341-90a4c600-8b59-11eb-9971-cc8090b4ba99.png)
-![Uploading Screen Shot 2021-04-26 at 10.37.43 AM.png…]()
