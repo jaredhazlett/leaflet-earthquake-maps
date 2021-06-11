@@ -1,5 +1,5 @@
 # leaflet-earthquake-maps
-This project plots earthquakes across the globe. The size of the markers are dependent on the magnitude of the earthquake, while the colors on the depth of the quake. 
+This project plots earthquakes across the globe. The size of the markers are dependent on the magnitude of the earthquake, while the colors on the depth of the quake. This is a map that updates in real time and relies on JavaScript, Leaflet, and a constantly updating geoJson courtesy of the USGS.
 
 You can choose different modes on which to view the hourly quake markers - Street Map, Dark Map(as shown below), Light Map or Gray Map. 
 You can also toggle the earthquake markers on/off.
